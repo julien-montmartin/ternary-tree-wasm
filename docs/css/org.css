@@ -1,0 +1,109 @@
+@import "gongzhitaao_org.css";
+
+
+dl {
+	margin: 25pt 0;
+	padding: 0;
+}
+
+dt {
+	clear: left;
+	font-weight: bold;
+	margin-top: 35pt;
+
+	color: #a5573e;
+	font-family: Helvetica,sans-serif;
+}
+
+
+/*
+ * Style définition 'simple'
+ *
+ */
+
+dd {
+	border-left: 1px solid #000;
+	margin: 0 0 0 60pt;
+	padding: 0 5pt;
+}
+
+dd img {
+	display: block;
+	float: none;
+	padding: 0 5pt;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+/*
+ * Style définition 'journal'
+ *
+ */
+
+dd p {
+	margin: 10pt 0;
+}
+
+dd p img {
+	display: block;
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+}
+
+
+/*
+ * Style pour pied de page
+ *
+ */
+
+.my-footer {
+	text-align: center;
+}
+
+
+/*
+ * Corrige une boite dans la boite lorsqu'on inclue un bloque de code
+ *
+ */
+.org-src-container {
+    border: none;
+    box-shadow: none;
+}
+
+
+/*
+ * Style clavier pour les macro org KBD- CTRL- SHIT- et META-,
+ * qui affiche des séquences de touches
+ *
+ */
+kbd {
+	background-color:#f0f0f0;
+	border-radius:4px;
+	border:solid 1px #c2c2c2;
+	box-shadow:1px 1px silver;
+	font-family:monospace, sans-serif;
+	padding-left:2pt;
+	padding-right:2pt;
+}
+
+
+/*
+ * Table des matières sur 3 colonnes (les deux dernières règles
+ * corrigent le pb des liens qui sautent)
+ *
+ */
+#text-table-of-contents {
+	padding: 1em;
+	column-count: 3;
+	column-gap: 1em;
+}
+#text-table-of-contents a {
+	border-bottom: 1px dotted;
+	border-bottom-color: transparent;
+}
+#text-table-of-contents a:hover {
+	border-bottom-color: #035;
+}

@@ -1,0 +1,35 @@
+[package]
+name = "ternary-tree-wasm"
+description = "A simplified Wasm binding to ternary-tree crate"
+version = "0.0.6"
+edition = "2018"
+authors = ["Julien Montmartin <julien.montmartin@fastmail.fm>"]
+license = "BSD-3-Clause"
+categories = ["data-structures"]
+keywords = ["tst", "ternary", "search", "tree", "wasm"]
+readme = "README.md"
+repository = "https://github.com/julien-montmartin/ternary-tree-wasm"
+
+include = [
+     "README.md",
+     "src/lib.rs",
+     "Cargo.toml",
+     "LICENSE",
+]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+ternary-tree = "^0.1.1"
+#ternary-tree = { path = "../ternary-tree" }
+js-sys = "0.3.32"
+wasm-bindgen = "0.2.55"
+
+[profile.release]
+lto = true
+#(wasm-opt is done in pack.sh)
+#Optimize aggressively for speed
+#opt-level = 3
+#Optimize aggressively for size
+#opt-level = 'z'

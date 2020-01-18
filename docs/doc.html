@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+<head>
+<!-- 2020-01-18 sam. 15:42 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ternary Tree Wasm</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="css/org.css"/>
+<style> .figure p {text-align: left;}</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Ternary Tree Wasm</h1>
+
+<div id="outline-container-org951b203" class="outline-2">
+<h2 id="org951b203">About this package</h2>
+<div class="outline-text-2" id="text-org951b203">
+<p>
+This is a simplified WebAssembly binding to my Rust <a href="https://crates.io/crates/ternary-tree">ternary-tree</a> crate.<br />
+<br />
+A Ternary Search Tree (TST) is a data structure which stores key/value pairs in a tree. The key is a string, and its characters are placed in the tree nodes. Each node may have three children (hence the name): a <i>left</i> child, a <i>middle</i> child and a <i>right</i> child.<br />
+<br />
+A search in a TST compares the current character in the key with the character of the current node:<br />
+<br />
+</p>
+<ul class="org-ul">
+<li>If both matches, the search traverses the middle child, and proceed to the next character in the key<br /></li>
+<li>If the key character is less than the node one, the search simply goes through the left child, and keep looking<br />
+for the same key character<br /></li>
+<li>Respectively, if the key character is greater than the node one, the search simply goes through the right child<br /></li>
+</ul>
+<p>
+<br />
+The data structure and its algorithm are explained very well in <a href="http://www.drdobbs.com/database/ternary-search-trees/184410528">Dr.Dobb's Ternary Search Trees</a> article.<br />
+<br />
+The following tree is the TST we get after inserting the following keys in order: "aba", "ab", "bc", "ac", "abc", "a", "b", "aca", "caa", "cbc", "bac", "c", "cca", "aab", "abb", "aa".<br />
+<br />
+</p>
+<p align="center"><img alt="An example of a Ternary Search Tree" src="./tree.svg"></p>
+<p>
+<br />
+A checked box "☑" denotes a node which stores a value (it corresponds to the last character of a key). An empty box<br />
+"☐" means that the node has no value.<br />
+<br />
+A TST can be used as a map, but it allows more flexible ways to retrieve values associated with keys. This package provides four basic ways to iterate over the values of a TST:<br />
+<br />
+</p>
+<ul class="org-ul">
+<li>Apply a closure to all values stored in the tree (same as a regular map) with <code>tree.visit(closure, direction)</code>. See original <a href="https://docs.rs/ternary-tree/0.1.0/ternary_tree/struct.Tst.html#method.iter">iter doc</a> 🦀<br /></li>
+<li>Apply a closure to all values whose keys begin with some prefix (i.e. <i>complete</i> some prefix) with <code>tree.complete(prefix, closure, direction)</code>. See original <a href="https://docs.rs/ternary-tree/0.1.0/ternary_tree/struct.Tst.html#method.iter_complete">iter_complete doc</a> 🦀<br /></li>
+<li>Apply a closure to all values whose keys are <i>close</i> to some string (<a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>) with <code>tree.neighbor(target, range, closure, direction)</code>. See original <a href="https://docs.rs/ternary-tree/0.1.0/ternary_tree/struct.Tst.html#method.iter_neighbor">iter_neighbor doc</a> 🦀<br /></li>
+<li>Apply a closure to all values whose keys match a string with some joker (e.g. "a?c") with <code>tree.crossword(pattern, joker, closure, direction)</code>. See original <a href="https://docs.rs/ternary-tree/0.1.0/ternary_tree/struct.Tst.html#method.iter_crossword">iter_crossword doc</a> 🦀<br /></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1392f86" class="outline-2">
+<h2 id="org1392f86">Quick API walkthrough</h2>
+<div class="outline-text-2" id="text-org1392f86">
+<p>
+The following is an <a href="https://julien-montmartin.github.io/ternary-tree-wasm/doc.org">experimental mix</a> of code, doc and basic tests, done with <a href="https://orgmode.org/fr/">org-mode</a>. It shows how to use this module API :<br />
+<br />
+</p>
+<ul class="org-ul">
+<li>clear<br /></li>
+<li>complete<br /></li>
+<li>count<br /></li>
+<li>crossword<br /></li>
+<li>get<br /></li>
+<li>insert<br /></li>
+<li>neighbor<br /></li>
+<li>new<br /></li>
+<li>pretty_print<br /></li>
+<li>remove<br /></li>
+<li>visit<br /></li>
+</ul>
+<p>
+<br />
+The <a href="https://rustwasm.github.io/docs/wasm-bindgen/introduction.html">wasm-bindgen</a> guide gives us the code needed to load the Wasm module <a href="https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html">without a bundler</a>.<br />
+</p>
+
+<script type ="module">
+//Load the package from npm through Unpkg. You need init, Tst and Direction.
+import init, {Tst, Direction} from
+    "https://unpkg.com/ternary-tree-wasm/ternary_tree_wasm.js";
+
+//Use it in an async function. Do not forget to call init.
+async function run() {
+
+    await init();
+
+    //(Pay no attention to "box" ids. They are used by Check
+    //function to report assertion results.)
+    let tree = CreateTree(Tst, "box1");
+
+    VisitTree(Direction, tree, "box2");
+
+    CompleteTree(Direction, tree, "box3");
+
+    NeighborTree(Direction, tree, "box4");
+
+    CrosswordTree(Direction, tree, "box5");
+
+    PrintAndClearTree(tree, "box6");
+}
+
+run();
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-comment-delimiter">//</span><span class="org-comment">Load the package from npm through Unpkg. You need init, Tst and Direction.</span>
+<span class="org-keyword">import</span> init, <span class="org-rainbow-delimiters-depth-1">{</span>Tst, Direction<span class="org-rainbow-delimiters-depth-1">}</span> from
+    <span class="org-string">"https://unpkg.com/ternary-tree-wasm/ternary_tree_wasm.js"</span>;
+
+<span class="org-comment-delimiter">//</span><span class="org-comment">Use it in an async function. Do not forget to call init.</span>
+<span class="org-keyword">async</span> <span class="org-keyword">function</span> run<span class="org-rainbow-delimiters-depth-1">()</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    <span class="org-keyword">await</span> init<span class="org-rainbow-delimiters-depth-2">()</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">(Pay no attention to "box" ids. They are used by Check</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">function to report assertion results.)</span>
+    <span class="org-keyword">let</span> <span class="org-variable-name">tree</span> = CreateTree<span class="org-rainbow-delimiters-depth-2">(</span>Tst, <span class="org-string">"box1"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    VisitTree<span class="org-rainbow-delimiters-depth-2">(</span>Direction, tree, <span class="org-string">"box2"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    CompleteTree<span class="org-rainbow-delimiters-depth-2">(</span>Direction, tree, <span class="org-string">"box3"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    NeighborTree<span class="org-rainbow-delimiters-depth-2">(</span>Direction, tree, <span class="org-string">"box4"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    CrosswordTree<span class="org-rainbow-delimiters-depth-2">(</span>Direction, tree, <span class="org-string">"box5"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    PrintAndClearTree<span class="org-rainbow-delimiters-depth-2">(</span>tree, <span class="org-string">"box6"</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+
+run<span class="org-rainbow-delimiters-depth-1">()</span>;
+</pre>
+</div>
+
+<script>
+function Check(code, res, expected, id) {
+
+    if(id == null) {
+
+        return;
+    }
+
+    if(code != null) {
+
+        code = code.toString();
+    }
+
+    if(res != null) {
+
+        res = res.toString();
+    }
+
+    if(expected != null) {
+
+        expected = expected.toString();
+    }
+
+    let mark = res == expected ? '✔' :  '❌';
+    let opt = res == expected ? '' : ' ≠ ' + expected
+    let line = mark + code + ' : ' + res + opt;
+
+    let codeElm = document.createElement('code');
+    codeElm.innerText=line;
+
+    let liElm = document.createElement('li');
+    liElm.appendChild(codeElm);
+
+    let resultElm = document.getElementById(id);
+    resultElm.appendChild(liElm);
+}
+</script>
+</div>
+
+<div id="outline-container-orgaf03728" class="outline-3">
+<h3 id="orgaf03728">Create a tree, add, get and remove some key and value</h3>
+<div class="outline-text-3" id="text-orgaf03728">
+<script type="text/javascript">
+function CreateTree(tst, id) {
+
+    //Create a new empty ternary search tree.
+    let tree = tst.new();
+
+    Check("#1 typeof(tree)", typeof(tree), "object", id);
+    Check("#2 tree.count()", tree.count(), 0, id);
+
+    let data = ["aba", "ab", "bc", "ac", "abc", "a", "b", "aca",
+        "caa", "cbc", "bac", "c", "cca", "aab", "abb", "aa"];
+
+    //Add 'matching' key value couples in the tree by deriving 'abc' strings.
+    for (const d of data) {
+
+        tree.insert("🗝"+d, "📦"+d);
+    }
+
+    Check("#3 tree.count()", tree.count(), 16, id);
+
+	//Use 'get' to retrieve the value of some key.
+    Check("#4 tree.get('🗝abc')", tree.get('🗝abc'), "📦abc", id);
+
+    //Use 'remove' to delete a key ; the value associated with the key is
+    //returned.
+    Check("#5 tree.remove('🗝abc')", tree.remove('🗝abc'), "📦abc", id);
+    Check("#6 tree.count()", tree.count(), 15, id);
+
+    //Request for a key that does not exist returns null.
+    Check("#7 tree.get('🗝abc')", tree.get('🗝abc'), null, id);
+
+    return tree;
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">function</span> <span class="org-function-name">CreateTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">tst</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Create a new empty ternary search tree.</span>
+    <span class="org-keyword">let</span> <span class="org-variable-name">tree</span> = tst.<span class="org-keyword">new</span><span class="org-rainbow-delimiters-depth-2">()</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 typeof(tree)"</span>, <span class="org-keyword">typeof</span><span class="org-rainbow-delimiters-depth-3">(</span>tree<span class="org-rainbow-delimiters-depth-3">)</span>, <span class="org-string">"object"</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#2 tree.count()"</span>, tree.count<span class="org-rainbow-delimiters-depth-3">()</span>, 0, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-keyword">let</span> <span class="org-variable-name">data</span> = <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">"aba"</span>, <span class="org-string">"ab"</span>, <span class="org-string">"bc"</span>, <span class="org-string">"ac"</span>, <span class="org-string">"abc"</span>, <span class="org-string">"a"</span>, <span class="org-string">"b"</span>, <span class="org-string">"aca"</span>,
+        <span class="org-string">"caa"</span>, <span class="org-string">"cbc"</span>, <span class="org-string">"bac"</span>, <span class="org-string">"c"</span>, <span class="org-string">"cca"</span>, <span class="org-string">"aab"</span>, <span class="org-string">"abb"</span>, <span class="org-string">"aa"</span><span class="org-rainbow-delimiters-depth-2">]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Add 'matching' key value couples in the tree by deriving 'abc' strings.</span>
+    <span class="org-keyword">for</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">const</span> <span class="org-variable-name">d</span> of data<span class="org-rainbow-delimiters-depth-2">)</span> <span class="org-rainbow-delimiters-depth-2">{</span>
+
+        tree.insert<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"&#128477;"</span>+d, <span class="org-string">"&#128230;"</span>+d<span class="org-rainbow-delimiters-depth-3">)</span>;
+    <span class="org-rainbow-delimiters-depth-2">}</span>
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#3 tree.count()"</span>, tree.count<span class="org-rainbow-delimiters-depth-3">()</span>, 16, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use 'get' to retrieve the value of some key.</span>
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#4 tree.get('&#128477;abc')"</span>, tree.get<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'&#128477;abc'</span><span class="org-rainbow-delimiters-depth-3">)</span>, <span class="org-string">"&#128230;abc"</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use 'remove' to delete a key ; the value associated with the key is</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">returned.</span>
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#5 tree.remove('&#128477;abc')"</span>, tree.remove<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'&#128477;abc'</span><span class="org-rainbow-delimiters-depth-3">)</span>, <span class="org-string">"&#128230;abc"</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#6 tree.count()"</span>, tree.count<span class="org-rainbow-delimiters-depth-3">()</span>, 15, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Request for a key that does not exist returns null.</span>
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#7 tree.get('&#128477;abc')"</span>, tree.get<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'&#128477;abc'</span><span class="org-rainbow-delimiters-depth-3">)</span>, <span class="org-constant">null</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-keyword">return</span> tree;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none;" id="box1">
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb92ce83" class="outline-3">
+<h3 id="orgb92ce83">Visit keys and values</h3>
+<div class="outline-text-3" id="text-orgb92ce83">
+<script type="text/javascript">
+var array = [];
+
+//Create a closure that will be called for all key value pairs of the tree.
+var push_all_items = function (key, value) {
+
+    array.push(`${key}=${value}`);
+};
+
+//If seeing more key value pairs is not needed, simply returns true.
+var push_two_items = function (key, value) {
+
+    array.push(`${key}=${value}`);
+
+    let should_break = array.length >= 2;
+
+    return should_break;
+};
+
+function VisitTree(go, tree, id) {
+
+    array = [];
+
+    //Use visit to call the closure on all key value pairs. Use Forward to get
+    //keys in alphabetical order and Backward to get them in reverse order.
+    tree.visit(push_all_items, go.Forward);
+
+    Check("#1 array", array, ["🗝a=📦a","🗝aa=📦aa","🗝aab=📦aab","🗝ab=📦ab",
+        "🗝aba=📦aba", "🗝abb=📦abb","🗝ac=📦ac","🗝aca=📦aca","🗝b=📦b",
+        "🗝bac=📦bac","🗝bc=📦bc", "🗝c=📦c","🗝caa=📦caa","🗝cbc=📦cbc",
+        "🗝cca=📦cca"], id);
+
+    array = [];
+
+    //Get the last two items of the tree.
+    tree.visit(push_two_items, go.Backward);
+
+    Check("#2 array", array, ["🗝cca=📦cca","🗝cbc=📦cbc"], id);
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">var</span> <span class="org-variable-name">array</span> = <span class="org-rainbow-delimiters-depth-1">[]</span>;
+
+<span class="org-comment-delimiter">//</span><span class="org-comment">Create a closure that will be called for all key value pairs of the tree.</span>
+<span class="org-keyword">var</span> <span class="org-variable-name">push_all_items</span> = <span class="org-keyword">function</span> <span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">key</span>, <span class="org-variable-name">value</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array.push<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">`${key}=${value}`</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>;
+
+<span class="org-comment-delimiter">//</span><span class="org-comment">If seeing more key value pairs is not needed, simply returns true.</span>
+<span class="org-keyword">var</span> <span class="org-variable-name">push_two_items</span> = <span class="org-keyword">function</span> <span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">key</span>, <span class="org-variable-name">value</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array.push<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">`${key}=${value}`</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-keyword">let</span> <span class="org-variable-name">should_break</span> = array.length &gt;= 2;
+
+    <span class="org-keyword">return</span> should_break;
+<span class="org-rainbow-delimiters-depth-1">}</span>;
+
+<span class="org-keyword">function</span> <span class="org-function-name">VisitTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">go</span>, <span class="org-variable-name">tree</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array = <span class="org-rainbow-delimiters-depth-2">[]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use visit to call the closure on all key value pairs. Use Forward to get</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">keys in alphabetical order and Backward to get them in reverse order.</span>
+    tree.visit<span class="org-rainbow-delimiters-depth-2">(</span>push_all_items, go.Forward<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 array"</span>, array, <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">"&#128477;a=&#128230;a"</span>,<span class="org-string">"&#128477;aa=&#128230;aa"</span>,<span class="org-string">"&#128477;aab=&#128230;aab"</span>,<span class="org-string">"&#128477;ab=&#128230;ab"</span>,
+        <span class="org-string">"&#128477;aba=&#128230;aba"</span>, <span class="org-string">"&#128477;abb=&#128230;abb"</span>,<span class="org-string">"&#128477;ac=&#128230;ac"</span>,<span class="org-string">"&#128477;aca=&#128230;aca"</span>,<span class="org-string">"&#128477;b=&#128230;b"</span>,
+        <span class="org-string">"&#128477;bac=&#128230;bac"</span>,<span class="org-string">"&#128477;bc=&#128230;bc"</span>, <span class="org-string">"&#128477;c=&#128230;c"</span>,<span class="org-string">"&#128477;caa=&#128230;caa"</span>,<span class="org-string">"&#128477;cbc=&#128230;cbc"</span>,
+        <span class="org-string">"&#128477;cca=&#128230;cca"</span><span class="org-rainbow-delimiters-depth-3">]</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    array = <span class="org-rainbow-delimiters-depth-2">[]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Get the last two items of the tree.</span>
+    tree.visit<span class="org-rainbow-delimiters-depth-2">(</span>push_two_items, go.Backward<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#2 array"</span>, array, <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">"&#128477;cca=&#128230;cca"</span>,<span class="org-string">"&#128477;cbc=&#128230;cbc"</span><span class="org-rainbow-delimiters-depth-3">]</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none" id="box2">
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8c49b84" class="outline-3">
+<h3 id="org8c49b84">Complete keys</h3>
+<div class="outline-text-3" id="text-org8c49b84">
+<script type="text/javascript">
+function CompleteTree(go, tree, id) {
+
+    array = [];
+
+    //Use complete with some prefix string to call the closure on all keys
+    //beginning with this prefix.
+    tree.complete("🗝ab", push_all_items, go.Forward);
+
+	//Note that "🗝ab=📦ab" is not present because there is nothing to complete
+    //(a prefix of some key can not be the whole key).
+    Check("#1 array", array, ["🗝aba=📦aba", "🗝abb=📦abb"], id);
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">function</span> <span class="org-function-name">CompleteTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">go</span>, <span class="org-variable-name">tree</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array = <span class="org-rainbow-delimiters-depth-2">[]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use complete with some prefix string to call the closure on all keys</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">beginning with this prefix.</span>
+    tree.complete<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"&#128477;ab"</span>, push_all_items, go.Forward<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Note that "&#128477;ab=&#128230;ab" is not present because there is nothing to complete</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">(a prefix of some key can not be the whole key).</span>
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 array"</span>, array, <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">"&#128477;aba=&#128230;aba"</span>, <span class="org-string">"&#128477;abb=&#128230;abb"</span><span class="org-rainbow-delimiters-depth-3">]</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none" id="box3">
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc24a4e2" class="outline-3">
+<h3 id="orgc24a4e2">Neighbors keys</h3>
+<div class="outline-text-3" id="text-orgc24a4e2">
+<script type="text/javascript">
+function NeighborTree(go, tree, id) {
+
+    array = [];
+
+    //Use neighbor with some "target" key and a "range" to call the closure on
+    //all keys close to the target key (think of range as the number of errors
+    //allowed).
+    tree.neighbor("🗝abc", 1, push_all_items, go.Forward);
+
+    Check("#1 array", array, ["🗝ab=📦ab", "🗝aba=📦aba", "🗝abb=📦abb",
+        "🗝cbc=📦cbc"], id);
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">function</span> <span class="org-function-name">NeighborTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">go</span>, <span class="org-variable-name">tree</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array = <span class="org-rainbow-delimiters-depth-2">[]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use neighbor with some "target" key and a "range" to call the closure on</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">all keys close to the target key (think of range as the number of errors</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">allowed).</span>
+    tree.neighbor<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"&#128477;abc"</span>, 1, push_all_items, go.Forward<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 array"</span>, array, <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">"&#128477;ab=&#128230;ab"</span>, <span class="org-string">"&#128477;aba=&#128230;aba"</span>, <span class="org-string">"&#128477;abb=&#128230;abb"</span>,
+        <span class="org-string">"&#128477;cbc=&#128230;cbc"</span><span class="org-rainbow-delimiters-depth-3">]</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none" id="box4">
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbcc2ab2" class="outline-3">
+<h3 id="orgbcc2ab2">Keys with jokers</h3>
+<div class="outline-text-3" id="text-orgbcc2ab2">
+<script type="text/javascript">
+function CrosswordTree(go, tree, id) {
+
+    array = [];
+
+    //Use crossword with some joker in the key to call the closure on
+    //all matching keys. You choose the joker character, and it will match
+    //excatly one key character.
+    tree.crossword("🗝?a?", '?', push_all_items, go.Forward);
+
+    Check("#1 array", array, ["🗝aab=📦aab", "🗝bac=📦bac", "🗝caa=📦caa"], id);
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">function</span> <span class="org-function-name">CrosswordTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">go</span>, <span class="org-variable-name">tree</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    array = <span class="org-rainbow-delimiters-depth-2">[]</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use crossword with some joker in the key to call the closure on</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">all matching keys. You choose the joker character, and it will match</span>
+    <span class="org-comment-delimiter">//</span><span class="org-comment">excatly one key character.</span>
+    tree.crossword<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"&#128477;?a?"</span>, <span class="org-string">'?'</span>, push_all_items, go.Forward<span class="org-rainbow-delimiters-depth-2">)</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 array"</span>, array, <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">"&#128477;aab=&#128230;aab"</span>, <span class="org-string">"&#128477;bac=&#128230;bac"</span>, <span class="org-string">"&#128477;caa=&#128230;caa"</span><span class="org-rainbow-delimiters-depth-3">]</span>, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none" id="box5">
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb78e7e8" class="outline-3">
+<h3 id="orgb78e7e8">Miscellaneous, pretty_print and clear</h3>
+<div class="outline-text-3" id="text-orgb78e7e8">
+<script type="text/javascript">
+function PrintAndClearTree(tree, id) {
+
+    //Use pretty_print to generate a dot description of the tree.
+    let tree_dot = tree.pretty_print();
+
+    //Use clear to remove all keys and values.
+    tree.clear();
+
+    Check("#1 tree.count()", tree.count(), 0, id);
+}
+</script>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span class="org-keyword">function</span> <span class="org-function-name">PrintAndClearTree</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-variable-name">tree</span>, <span class="org-variable-name">id</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-rainbow-delimiters-depth-1">{</span>
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use pretty_print to generate a dot description of the tree.</span>
+    <span class="org-keyword">let</span> <span class="org-variable-name">tree_dot</span> = tree.pretty_print<span class="org-rainbow-delimiters-depth-2">()</span>;
+
+    <span class="org-comment-delimiter">//</span><span class="org-comment">Use clear to remove all keys and values.</span>
+    tree.clear<span class="org-rainbow-delimiters-depth-2">()</span>;
+
+    Check<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"#1 tree.count()"</span>, tree.count<span class="org-rainbow-delimiters-depth-3">()</span>, 0, id<span class="org-rainbow-delimiters-depth-2">)</span>;
+<span class="org-rainbow-delimiters-depth-1">}</span>
+</pre>
+</div>
+<div>
+<h4>Checks</h4>
+<ul style="list-style: none" id="box6">
+</ul>
+</div>
+<p>
+<br />
+The content of the variable <code>tree_dot</code> above is saved in the file <a href="./tree.dot">tree.dot</a>. It can be rendered to an image with the <code>dot</code> program which is part of the <a href="https://graphviz.org/">Graphviz</a> package. For example, the command <code>dot -T svg -o tree.svg tree.dot</code> will produce the <a href="./tree.svg">svg image</a> you can see at the beginning of this page.<br />
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
